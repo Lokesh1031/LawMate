@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -97,5 +98,44 @@
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* Print styles */
+@media print {
+  header, 
+  footer, 
+  nav, 
+  .print\:hidden {
+    display: none !important;
+  }
+  
+  body {
+    font-size: 12pt;
+  }
+  
+  h1 {
+    font-size: 18pt;
+    margin-bottom: 10pt;
+  }
+  
+  h2 {
+    font-size: 16pt;
+    margin-bottom: 8pt;
+  }
+  
+  h3 {
+    font-size: 14pt;
+    margin-bottom: 6pt;
+  }
+  
+  a {
+    text-decoration: none;
+    color: black;
+  }
+
+  .container {
+    max-width: 100%;
+    padding: 0;
   }
 }
