@@ -1,19 +1,15 @@
-
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { getQuestionById, getGuideById } from "@/lib/data";
-import { HelpCircle, ArrowRight, ChevronRight, PenBox, Lightbulb, Save } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import CaseProgress from "@/components/CaseProgress";
-import QuestionAnalysis from "@/components/QuestionAnalysis";
 import { useUserCase } from "@/hooks/useUserCase";
 import { supabase } from "@/integrations/supabase/client";
+import { PenBox, Lightbulb } from "lucide-react";
+import { getGuideById } from "@/lib/data";
+import GuidedQuestionnaire from "@/components/questionnaire/GuidedQuestionnaire";
+import CustomQuestionForm from "@/components/questionnaire/CustomQuestionForm";
 
 const Questionnaire = () => {
   const navigate = useNavigate();
@@ -26,12 +22,12 @@ const Questionnaire = () => {
   const [analysisResult, setAnalysisResult] = useState<string | null>(null);
   const [relatedGuides, setRelatedGuides] = useState<Array<{id: string; title: string;}>>([]);
 
-  const currentQuestion = getQuestionById(caseData.currentQuestionId);
   const totalQuestions = 6; // Total questions in the questionnaire
   const completedQuestions = Object.keys(caseData.answers).length;
   const currentStep = Math.min(completedQuestions + 1, 5); // Cap at 5 steps
 
   const handleOptionSelect = (optionId: string) => {
+    const currentQuestion = getQuestionById(caseData.currentQuestionId);
     if (!currentQuestion) return;
     
     // Record the answer
@@ -199,26 +195,6 @@ const Questionnaire = () => {
     saveCaseToDatabase();
   };
 
-  if (!currentQuestion && activeTab === "guided") {
-    return (
-      <Layout>
-        <div className="container py-8">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-center text-red-500">Error</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-center">Question not found. Please start over.</p>
-            </CardContent>
-            <CardFooter className="flex justify-center">
-              <Button onClick={handleResetQuestionnaire}>Start Over</Button>
-            </CardFooter>
-          </Card>
-        </div>
-      </Layout>
-    );
-  }
-
   return (
     <Layout>
       <div className="container py-12 max-w-4xl">
@@ -251,103 +227,28 @@ const Questionnaire = () => {
           
           {/* Guided Questionnaire Tab */}
           <TabsContent value="guided">
-            <Card className="shadow-lg">
-              <CardHeader>
-                <div className="flex items-center mb-2">
-                  <HelpCircle className="text-lawmate mr-2 h-5 w-5" />
-                  <CardTitle>Question {caseData.currentQuestionId.replace('q', '')}</CardTitle>
-                </div>
-                <CardDescription>
-                  Select the option that best describes your situation.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <h3 className="text-xl font-semibold mb-6">{currentQuestion?.text}</h3>
-                <div className="space-y-3">
-                  {currentQuestion?.options.map((option) => (
-                    <Button
-                      key={option.id}
-                      variant="outline"
-                      className="w-full justify-between text-left h-auto py-4 px-6 text-base hover:bg-lawmate hover:text-white transition-all"
-                      onClick={() => handleOptionSelect(option.id)}
-                    >
-                      <span>{option.text}</span>
-                      <ChevronRight className="h-5 w-5" />
-                    </Button>
-                  ))}
-                </div>
-              </CardContent>
-              <CardFooter className="flex justify-between">
-                <div className="flex space-x-2">
-                  <Button variant="ghost" onClick={handleBack}>
-                    Back
-                  </Button>
-                  <Button variant="outline" onClick={handleResetQuestionnaire}>
-                    Reset
-                  </Button>
-                </div>
-                <Button
-                  variant="link"
-                  className="text-lawmate"
-                  onClick={() => navigate("/categories")}
-                >
-                  Browse All Categories <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </CardFooter>
-            </Card>
+            <GuidedQuestionnaire
+              caseData={caseData}
+              handleOptionSelect={handleOptionSelect}
+              handleBack={handleBack}
+              handleResetQuestionnaire={handleResetQuestionnaire}
+            />
           </TabsContent>
           
           {/* Custom Question Tab */}
           <TabsContent value="custom">
-            <Card className="shadow-lg">
-              <CardHeader>
-                <CardTitle>Describe Your Legal Issue</CardTitle>
-                <CardDescription>
-                  Provide details about your case and our AI will analyze it to give you the best guidance.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="legal-question">Your legal question or issue</Label>
-                  <Textarea
-                    id="legal-question"
-                    placeholder="Explain your situation in detail. For example: 'My landlord hasn't fixed my broken heater for 3 weeks despite multiple requests. What are my rights?'"
-                    value={customQuestion}
-                    onChange={(e) => setCustomQuestion(e.target.value)}
-                    rows={5}
-                    className="resize-none"
-                  />
-                </div>
-                
-                {analysisResult && (
-                  <QuestionAnalysis
-                    question={customQuestion}
-                    answer={analysisResult}
-                    relatedGuides={relatedGuides}
-                    onGuideSelect={handleGuideSelect}
-                  />
-                )}
-              </CardContent>
-              <CardFooter className="flex justify-between">
-                <div className="flex space-x-2">
-                  <Button variant="outline" onClick={handleResetQuestionnaire}>
-                    Reset
-                  </Button>
-                  {analysisResult && (
-                    <Button variant="outline" onClick={handleSaveProgress} disabled={loading}>
-                      <Save className="mr-2 h-4 w-4" /> Save Progress
-                    </Button>
-                  )}
-                </div>
-                <Button
-                  onClick={handleSubmitCustomQuestion}
-                  disabled={!customQuestion.trim() || isAnalyzing}
-                  className="bg-lawmate hover:bg-lawmate-light"
-                >
-                  {isAnalyzing ? "Analyzing..." : "Get AI Legal Analysis"}
-                </Button>
-              </CardFooter>
-            </Card>
+            <CustomQuestionForm
+              customQuestion={customQuestion}
+              setCustomQuestion={setCustomQuestion}
+              analysisResult={analysisResult}
+              relatedGuides={relatedGuides}
+              isAnalyzing={isAnalyzing}
+              loading={loading}
+              handleSubmitCustomQuestion={handleSubmitCustomQuestion}
+              handleGuideSelect={handleGuideSelect}
+              handleResetQuestionnaire={handleResetQuestionnaire}
+              handleSaveProgress={handleSaveProgress}
+            />
           </TabsContent>
         </Tabs>
         

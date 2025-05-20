@@ -1,10 +1,9 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import Layout from "@/components/Layout";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { categories } from "@/lib/data";
-import { Home, Briefcase, FileText, Users, Scale, Gavel, ClipboardList, Search } from "lucide-react";
+import { Home, Briefcase, FileText, Users, Scale, Gavel, ClipboardList, Search, ArrowRight } from "lucide-react";
 
 const getIconComponent = (iconName: string) => {
   switch (iconName) {

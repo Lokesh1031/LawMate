@@ -1,9 +1,9 @@
 
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
-interface CaseData {
+export interface CaseData {
   currentQuestionId: string;
   previousQuestions: string[];
   answers: Record<string, string>;
@@ -74,8 +74,8 @@ export const useUserCase = () => {
       
       // Insert the case into the Supabase database
       const { data, error } = await supabase
-        .from('user_cases')
-        .insert(caseToSave);
+        .from('user_cases' as any) // Type assertion to fix TS error
+        .insert(caseToSave as any); // Type assertion to fix TS error
       
       if (error) {
         console.error('Error saving to Supabase:', error);
