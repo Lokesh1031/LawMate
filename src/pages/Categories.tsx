@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import Layout from "@/components/Layout";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { categories } from "@/lib/data";
-import { Home, Briefcase, FileText, HelpCircle, ArrowRight } from "lucide-react";
+import { Home, Briefcase, FileText, Users, Scale, Gavel, ClipboardList, Search } from "lucide-react";
 
 const getIconComponent = (iconName: string) => {
   switch (iconName) {
@@ -14,8 +14,16 @@ const getIconComponent = (iconName: string) => {
       return <Briefcase className="h-12 w-12" />;
     case "FileText":
       return <FileText className="h-12 w-12" />;
+    case "Users":
+      return <Users className="h-12 w-12" />;
+    case "Scale":
+      return <Scale className="h-12 w-12" />;
+    case "Gavel":
+      return <Gavel className="h-12 w-12" />;
+    case "ClipboardList":
+      return <ClipboardList className="h-12 w-12" />;
     default:
-      return <HelpCircle className="h-12 w-12" />;
+      return <Search className="h-12 w-12" />;
   }
 };
 

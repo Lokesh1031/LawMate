@@ -1,10 +1,10 @@
+
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { getQuestionById, getGuideById } from "@/lib/data";
 import { HelpCircle, ArrowRight, ChevronRight, PenBox, Lightbulb, Save } from "lucide-react";
@@ -13,6 +13,7 @@ import { useToast } from "@/components/ui/use-toast";
 import CaseProgress from "@/components/CaseProgress";
 import QuestionAnalysis from "@/components/QuestionAnalysis";
 import { useUserCase } from "@/hooks/useUserCase";
+import { supabase } from "@/integrations/supabase/client";
 
 const Questionnaire = () => {
   const navigate = useNavigate();
@@ -85,7 +86,7 @@ const Questionnaire = () => {
     });
   };
 
-  const handleSubmitCustomQuestion = () => {
+  const handleSubmitCustomQuestion = async () => {
     if (!customQuestion.trim()) {
       toast({
         title: "Please enter your question",
@@ -97,45 +98,63 @@ const Questionnaire = () => {
 
     setIsAnalyzing(true);
 
-    // This simulates an AI-powered analysis of the user's question
-    // In a production app, this would call an API or use a more sophisticated matching algorithm
-    setTimeout(() => {
-      // Simple keyword matching for the demo
-      const question = customQuestion.toLowerCase();
-      let resultText = "Based on your question, we've identified some potential legal issues. Please review the recommended guides below.";
+    try {
+      // Call the Supabase edge function to analyze the case
+      const { data, error } = await supabase.functions.invoke('analyze-legal-case', {
+        body: {
+          caseDescription: customQuestion,
+          caseType: "Custom question"
+        }
+      });
+
+      if (error) {
+        throw new Error(error.message || 'Failed to analyze your case');
+      }
+
+      if (data && data.analysis) {
+        setAnalysisResult(data.analysis.summary);
+        setRelatedGuides(data.analysis.relatedGuides || []);
+        
+        // Store this information
+        updateCase({
+          caseType: "Custom question",
+          analysisResult: data.analysis.summary,
+        });
+        
+        await saveCaseToDatabase();
+      }
+    } catch (error) {
+      console.error('Error analyzing case:', error);
+      
+      // Fallback to simple keyword matching if the edge function fails
+      const resultText = "Based on your question, we've identified some potential legal issues. Please review the recommended guides below.";
       let matchedGuides = [];
       
-      if (question.includes("divorce") || question.includes("custody") || question.includes("marriage")) {
+      const question = customQuestion.toLowerCase();
+      
+      if (question.includes('divorce') || question.includes('custody') || question.includes('marriage')) {
         matchedGuides.push({ id: "g1", title: "How to File for Divorce" });
         matchedGuides.push({ id: "g2", title: "Child Custody and Support" });
       } 
       
-      if (question.includes("landlord") || question.includes("tenant") || question.includes("rent") || question.includes("lease") || question.includes("apartment")) {
+      if (question.includes('landlord') || question.includes('tenant') || question.includes('rent') || question.includes('lease')) {
         matchedGuides.push({ id: "g5", title: "Dealing with Landlord-Tenant Disputes" });
       }
       
-      if (question.includes("fired") || question.includes("termination") || question.includes("workplace") || question.includes("job") || question.includes("employment")) {
+      if (question.includes('fired') || question.includes('termination') || question.includes('workplace')) {
         matchedGuides.push({ id: "g9", title: "Understanding Wrongful Termination" });
       }
       
-      if (question.includes("contract") || question.includes("agreement") || question.includes("breach")) {
-        matchedGuides.push({ id: "g13", title: "Handling Breach of Contract Issues" });
-      }
-      
-      // If no matches, provide general guidance
       if (matchedGuides.length === 0) {
-        resultText = "We couldn't find specific guides matching your question. Please browse our categories or try asking a more specific question about your legal issue.";
         matchedGuides = [
           { id: "family", title: "Browse Family Law Guides" },
           { id: "housing", title: "Browse Housing & Property Guides" },
           { id: "employment", title: "Browse Employment Law Guides" },
-          { id: "contracts", title: "Browse Contract Law Guides" },
         ];
       }
       
       setAnalysisResult(resultText);
       setRelatedGuides(matchedGuides);
-      setIsAnalyzing(false);
       
       // Store this information
       updateCase({
@@ -143,8 +162,15 @@ const Questionnaire = () => {
         analysisResult: resultText,
       });
       
-      saveCaseToDatabase();
-    }, 2000);
+      await saveCaseToDatabase();
+      
+      toast({
+        title: "Analysis complete",
+        description: "We've analyzed your case using our backup system.",
+      });
+    } finally {
+      setIsAnalyzing(false);
+    }
   };
 
   const handleGuideSelect = (guideId: string) => {
@@ -277,7 +303,7 @@ const Questionnaire = () => {
               <CardHeader>
                 <CardTitle>Describe Your Legal Issue</CardTitle>
                 <CardDescription>
-                  Provide details about your case and we'll analyze it to give you the best guidance.
+                  Provide details about your case and our AI will analyze it to give you the best guidance.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -318,7 +344,7 @@ const Questionnaire = () => {
                   disabled={!customQuestion.trim() || isAnalyzing}
                   className="bg-lawmate hover:bg-lawmate-light"
                 >
-                  {isAnalyzing ? "Analyzing..." : "Get Guidance"}
+                  {isAnalyzing ? "Analyzing..." : "Get AI Legal Analysis"}
                 </Button>
               </CardFooter>
             </Card>

@@ -1,8 +1,9 @@
 
 import React from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { BadgeInfo } from "lucide-react";
+import { BadgeInfo, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface QuestionAnalysisProps {
   question: string;
@@ -21,37 +22,45 @@ const QuestionAnalysis: React.FC<QuestionAnalysisProps> = ({
   onGuideSelect,
 }) => {
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <Alert className="bg-blue-50 border-blue-200">
         <BadgeInfo className="h-4 w-4 text-blue-500" />
-        <AlertTitle className="text-blue-700">Your Question</AlertTitle>
+        <AlertTitle className="text-blue-700">Your Legal Question</AlertTitle>
         <AlertDescription className="text-blue-600">
           {question}
         </AlertDescription>
       </Alert>
       
-      <div className="p-4 bg-white rounded-lg shadow-md">
-        <h3 className="font-medium text-lg mb-2 text-lawmate">Analysis</h3>
-        <p className="text-gray-700 mb-4">{answer}</p>
-        
-        {relatedGuides.length > 0 && (
-          <>
-            <h4 className="font-medium mb-2">Recommended Guides</h4>
-            <div className="space-y-2">
-              {relatedGuides.map((guide) => (
-                <Button 
-                  key={guide.id}
-                  variant="outline" 
-                  className="w-full justify-start text-left hover:bg-lawmate/10"
-                  onClick={() => onGuideSelect(guide.id)}
-                >
-                  {guide.title}
-                </Button>
-              ))}
-            </div>
-          </>
-        )}
-      </div>
+      <Card className="border-lawmate/20 shadow-md">
+        <CardHeader className="bg-lawmate/5">
+          <CardTitle className="text-lawmate">AI Legal Analysis</CardTitle>
+          <CardDescription>
+            Based on your description, we've analyzed your situation and found potential legal considerations
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="pt-4">
+          <p className="text-gray-700 mb-6">{answer}</p>
+          
+          {relatedGuides.length > 0 && (
+            <>
+              <h4 className="font-medium mb-3 text-lawmate">Recommended Legal Guides</h4>
+              <div className="space-y-2">
+                {relatedGuides.map((guide) => (
+                  <Button 
+                    key={guide.id}
+                    variant="outline" 
+                    className="w-full justify-between text-left hover:bg-lawmate/10 transition-all"
+                    onClick={() => onGuideSelect(guide.id)}
+                  >
+                    <span>{guide.title}</span>
+                    <ArrowRight className="h-4 w-4 text-lawmate" />
+                  </Button>
+                ))}
+              </div>
+            </>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 };

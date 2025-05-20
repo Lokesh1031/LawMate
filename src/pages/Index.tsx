@@ -9,7 +9,9 @@ import {
   ArrowRight,
   Shield,
   Briefcase,
-  Home
+  Home,
+  Gavel,
+  Users
 } from "lucide-react";
 
 const Index = () => {
@@ -66,7 +68,7 @@ const Index = () => {
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-white p-8 rounded-lg shadow-md text-center">
               <div className="bg-lawmate-light h-16 w-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                <HelpCircle className="h-8 w-8 text-white" />
+                <Gavel className="h-8 w-8 text-white" />
               </div>
               <h3 className="text-xl font-semibold mb-4 text-lawmate">Personal Legal Assessment</h3>
               <p className="text-gray-600">
@@ -105,7 +107,7 @@ const Index = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             <Link to="/category/family">
               <div className="group p-6 bg-gray-50 rounded-lg hover:bg-lawmate hover:text-white transition text-center">
-                <Home className="h-10 w-10 mx-auto mb-4 text-lawmate group-hover:text-white transition" />
+                <Users className="h-10 w-10 mx-auto mb-4 text-lawmate group-hover:text-white transition" />
                 <h3 className="font-semibold">Family Law</h3>
               </div>
             </Link>

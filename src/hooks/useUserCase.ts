@@ -59,18 +59,32 @@ export const useUserCase = () => {
     }
   }, []);
 
-  // Method to save user case data to Supabase when implemented
+  // Method to save user case data to Supabase
   const saveCaseToDatabase = async () => {
     try {
       setLoading(true);
       
-      // This is a placeholder for future Supabase integration
-      // In the future, this will save the case data to the database
-      console.log('Case data would be saved to database', caseData);
+      // Prepare the data for saving to Supabase
+      const caseToSave = {
+        case_type: caseData.caseType || "Unspecified",
+        analysis_result: caseData.analysisResult || "",
+        answers: JSON.stringify(caseData.answers),
+        created_at: new Date().toISOString(),
+      };
+      
+      // Insert the case into the Supabase database
+      const { data, error } = await supabase
+        .from('user_cases')
+        .insert(caseToSave);
+      
+      if (error) {
+        console.error('Error saving to Supabase:', error);
+        throw error;
+      }
       
       toast({
         title: "Progress saved",
-        description: "Your case details have been saved."
+        description: "Your case details have been saved to your account."
       });
       
       return true;
@@ -78,7 +92,7 @@ export const useUserCase = () => {
       console.error('Error saving case data', error);
       toast({
         title: "Error saving progress",
-        description: "Please try again later.",
+        description: "Please try again later or check if you're logged in.",
         variant: "destructive"
       });
       return false;
