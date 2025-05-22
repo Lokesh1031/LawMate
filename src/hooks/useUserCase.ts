@@ -64,18 +64,31 @@ export const useUserCase = () => {
     try {
       setLoading(true);
       
+      // Get current user
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        toast({
+          title: "Not logged in",
+          description: "Please log in to save your case details.",
+          variant: "destructive"
+        });
+        return false;
+      }
+      
       // Prepare the data for saving to Supabase
       const caseToSave = {
+        user_id: user.id,
         case_type: caseData.caseType || "Unspecified",
         analysis_result: caseData.analysisResult || "",
-        answers: JSON.stringify(caseData.answers),
+        answers: caseData.answers,
         created_at: new Date().toISOString(),
       };
       
       // Insert the case into the Supabase database
       const { data, error } = await supabase
-        .from('user_cases' as any) // Type assertion to fix TS error
-        .insert(caseToSave as any); // Type assertion to fix TS error
+        .from('user_cases')
+        .insert(caseToSave);
       
       if (error) {
         console.error('Error saving to Supabase:', error);

@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -6,17 +7,22 @@ import { useToast } from "@/hooks/use-toast";
 import CaseProgress from "@/components/CaseProgress";
 import { useUserCase } from "@/hooks/useUserCase";
 import { supabase } from "@/integrations/supabase/client";
-import { PenBox, Lightbulb } from "lucide-react";
+import { PenBox, Lightbulb, MessageSquareText } from "lucide-react";
 import { getGuideById } from "@/lib/data";
+import { getQuestionById } from "@/lib/questions";
 import GuidedQuestionnaire from "@/components/questionnaire/GuidedQuestionnaire";
 import CustomQuestionForm from "@/components/questionnaire/CustomQuestionForm";
+import AIChatAssistant from "@/components/AIChatAssistant";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
 
 const Questionnaire = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user } = useAuth();
   const { caseData, updateCase, resetCase, saveCaseToDatabase, loading } = useUserCase();
   
-  const [activeTab, setActiveTab] = useState<"guided" | "custom">("guided");
+  const [activeTab, setActiveTab] = useState<"guided" | "custom" | "assistant">("guided");
   const [customQuestion, setCustomQuestion] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<string | null>(null);
@@ -192,8 +198,26 @@ const Questionnaire = () => {
   };
 
   const handleSaveProgress = () => {
+    if (!user) {
+      toast({
+        title: "Sign in required",
+        description: "Please sign in to save your progress.",
+        variant: "destructive"
+      });
+      navigate("/auth");
+      return;
+    }
     saveCaseToDatabase();
   };
+
+  useEffect(() => {
+    if (analysisResult && !user) {
+      toast({
+        title: "Sign in to save your analysis",
+        description: "Create an account to save this legal analysis for future reference.",
+      });
+    }
+  }, [analysisResult, user, toast]);
 
   return (
     <Layout>
@@ -201,8 +225,15 @@ const Questionnaire = () => {
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold text-lawmate mb-4">Legal Issue Assessment</h1>
           <p className="text-gray-600">
-            Get step-by-step guidance tailored to your legal situation. Choose our guided questionnaire or describe your case in your own words.
+            Get step-by-step guidance tailored to your legal situation. Choose our guided questionnaire, describe your case in your own words, or chat with our AI assistant.
           </p>
+          {!user && (
+            <div className="mt-4">
+              <Button variant="outline" onClick={() => navigate("/auth")}>
+                Sign in to save your progress
+              </Button>
+            </div>
+          )}
         </div>
 
         {/* Progress tracker */}
@@ -215,13 +246,16 @@ const Questionnaire = () => {
           />
         )}
 
-        <Tabs defaultValue="guided" value={activeTab} onValueChange={(value) => setActiveTab(value as "guided" | "custom")}>
+        <Tabs defaultValue="guided" value={activeTab} onValueChange={(value) => setActiveTab(value as "guided" | "custom" | "assistant")}>
           <TabsList className="w-full mb-6">
-            <TabsTrigger value="guided" className="flex-1">
+            <TabsTrigger value="guided" className="flex-1 flex items-center justify-center">
               <PenBox className="mr-2 h-4 w-4" /> Guided Questionnaire
             </TabsTrigger>
-            <TabsTrigger value="custom" className="flex-1">
+            <TabsTrigger value="custom" className="flex-1 flex items-center justify-center">
               <Lightbulb className="mr-2 h-4 w-4" /> Describe Your Case
+            </TabsTrigger>
+            <TabsTrigger value="assistant" className="flex-1 flex items-center justify-center">
+              <MessageSquareText className="mr-2 h-4 w-4" /> AI Assistant
             </TabsTrigger>
           </TabsList>
           
@@ -249,6 +283,13 @@ const Questionnaire = () => {
               handleResetQuestionnaire={handleResetQuestionnaire}
               handleSaveProgress={handleSaveProgress}
             />
+          </TabsContent>
+          
+          {/* AI Assistant Tab */}
+          <TabsContent value="assistant">
+            <div className="bg-white shadow rounded-lg">
+              <AIChatAssistant caseData={caseData.answers} />
+            </div>
           </TabsContent>
         </Tabs>
         

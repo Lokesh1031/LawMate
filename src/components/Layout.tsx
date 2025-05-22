@@ -1,8 +1,10 @@
 
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Scale, Menu, X } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import UserProfile from "@/components/auth/UserProfile";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -10,6 +12,8 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  const { user, loading } = useAuth();
+  const navigate = useNavigate();
   
   return (
     <div className="min-h-screen flex flex-col">
@@ -32,6 +36,18 @@ const Layout = ({ children }: LayoutProps) => {
           </nav>
           
           <div className="flex items-center gap-4">
+            {!loading && (
+              user ? (
+                <UserProfile />
+              ) : (
+                <Link to="/auth">
+                  <Button variant="outline" className="hidden md:inline-flex bg-white text-lawmate hover:bg-lawmate-accent hover:text-white">
+                    Sign In
+                  </Button>
+                </Link>
+              )
+            )}
+            
             <Link to="/questionnaire">
               <Button variant="outline" className="hidden md:inline-flex bg-white text-lawmate hover:bg-lawmate-accent hover:text-white">
                 Get Started
@@ -57,6 +73,11 @@ const Layout = ({ children }: LayoutProps) => {
             <Link to="/categories" className="px-4 py-2 hover:bg-lawmate hover:bg-opacity-50 rounded" onClick={() => setMobileMenuOpen(false)}>Legal Categories</Link>
             <Link to="/documents" className="px-4 py-2 hover:bg-lawmate hover:bg-opacity-50 rounded" onClick={() => setMobileMenuOpen(false)}>Documents</Link>
             <Link to="/faq" className="px-4 py-2 hover:bg-lawmate hover:bg-opacity-50 rounded" onClick={() => setMobileMenuOpen(false)}>FAQ</Link>
+            {!loading && !user && (
+              <Link to="/auth" className="px-4 py-2 hover:bg-lawmate hover:bg-opacity-50 rounded" onClick={() => setMobileMenuOpen(false)}>
+                Sign In
+              </Link>
+            )}
             <Link to="/questionnaire" className="px-4 py-2 hover:bg-lawmate hover:bg-opacity-50 rounded" onClick={() => setMobileMenuOpen(false)}>
               <Button variant="outline" className="w-full bg-white text-lawmate hover:bg-lawmate-accent hover:text-white">
                 Get Started
