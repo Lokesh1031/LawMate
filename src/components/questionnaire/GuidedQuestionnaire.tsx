@@ -4,8 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { HelpCircle, ArrowRight, ChevronRight } from "lucide-react";
-import { getQuestionById } from "@/lib/data";
-import { useToast } from "@/hooks/use-toast";
+import { getQuestionById } from "@/lib/questions";
 import { CaseData } from "@/hooks/useUserCase";
 
 interface GuidedQuestionnaireProps {
