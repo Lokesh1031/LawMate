@@ -5,6 +5,7 @@ import QuestionAnalysis from "@/components/QuestionAnalysis";
 import { Loader2 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
 
 interface CaseAnalysisResultProps {
   customQuestion: string;

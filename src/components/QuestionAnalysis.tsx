@@ -4,6 +4,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { BadgeInfo, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import ReactMarkdown from "react-markdown";
 
 interface QuestionAnalysisProps {
   question: string;
@@ -39,7 +40,9 @@ const QuestionAnalysis: React.FC<QuestionAnalysisProps> = ({
           </CardDescription>
         </CardHeader>
         <CardContent className="pt-4">
-          <p className="text-gray-700 mb-6">{answer}</p>
+          <div className="text-gray-700 mb-6 prose prose-sm max-w-none">
+            <ReactMarkdown>{answer}</ReactMarkdown>
+          </div>
           
           {relatedGuides.length > 0 && (
             <>

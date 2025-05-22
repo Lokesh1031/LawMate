@@ -1,8 +1,8 @@
 
 import React, { useEffect } from "react";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import AIChatAssistant from "@/components/AIChatAssistant";
-import { MessageSquareText } from "lucide-react";
+import { MessageSquareText, HelpCircle, Lightbulb } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -26,6 +26,15 @@ const AIChatTab: React.FC<AIChatTabProps> = ({ caseData }) => {
     }
   }, [user, toast]);
 
+  // Sample questions to help users get started
+  const sampleQuestions = [
+    "What are the steps to file for divorce in my state?",
+    "How can I handle a landlord who won't make necessary repairs?",
+    "What should I do if I believe I was wrongfully terminated?",
+    "What are my rights in a child custody dispute?",
+    "How do I respond to a breach of contract?"
+  ];
+
   return (
     <div className="space-y-6">
       <Card className="shadow-lg border-lawmate/20">
@@ -35,6 +44,11 @@ const AIChatTab: React.FC<AIChatTabProps> = ({ caseData }) => {
             LawMate AI Legal Assistant
           </CardTitle>
         </CardHeader>
+        <CardContent className="pt-4">
+          <p className="text-gray-700 mb-4">
+            Ask specific questions about your legal situation and I'll provide step-by-step guidance. For better results, include relevant details about your case.
+          </p>
+        </CardContent>
       </Card>
       
       <div className="rounded-lg shadow-lg">
@@ -43,6 +57,24 @@ const AIChatTab: React.FC<AIChatTabProps> = ({ caseData }) => {
           className="min-h-[500px]" 
         />
       </div>
+
+      <Card className="bg-blue-50 border border-blue-100">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-blue-700 flex items-center text-lg">
+            <Lightbulb className="h-5 w-5 mr-2" />
+            Sample Questions
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-2">
+            {sampleQuestions.map((question, index) => (
+              <div key={index} className="p-2 bg-white rounded-md border border-blue-100 text-gray-700 text-sm">
+                {question}
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
       {!user && (
         <div className="mt-6 bg-blue-50 border border-blue-100 p-4 rounded-lg">
@@ -58,12 +90,6 @@ const AIChatTab: React.FC<AIChatTabProps> = ({ caseData }) => {
           </Button>
         </div>
       )}
-      
-      <div className="mt-4 bg-gray-50 border border-gray-200 p-4 rounded-lg">
-        <p className="text-sm text-gray-600">
-          <strong>How to use this assistant:</strong> Ask specific questions about your legal situation, such as "What should I do if my landlord refuses to make repairs?" or "What are my rights in a custody dispute?"
-        </p>
-      </div>
     </div>
   );
 };
