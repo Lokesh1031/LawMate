@@ -1,5 +1,6 @@
+
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Layout from "@/components/Layout";
 import { useToast } from "@/hooks/use-toast";
 import { useUserCase } from "@/hooks/useUserCase";
@@ -12,11 +13,16 @@ import QuestionnaireTabs from "@/components/questionnaire/QuestionnaireTabs";
 
 const Questionnaire = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
   const { user } = useAuth();
   const { caseData, updateCase, resetCase, saveCaseToDatabase, loading } = useUserCase();
   
-  const [activeTab, setActiveTab] = useState<"guided" | "custom" | "assistant">("guided");
+  // Get the tab from URL parameters
+  const queryParams = new URLSearchParams(location.search);
+  const defaultTab = queryParams.get('tab') as "guided" | "custom" | "assistant" || "guided";
+  
+  const [activeTab, setActiveTab] = useState<"guided" | "custom" | "assistant">(defaultTab);
   const [customQuestion, setCustomQuestion] = useState("");
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<string | null>(null);
@@ -26,6 +32,13 @@ const Questionnaire = () => {
   const totalQuestions = 6;
   const completedQuestions = Object.keys(caseData.answers).length;
   const currentStep = Math.min(completedQuestions + 1, 5);
+
+  // Update URL when tab changes
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    params.set('tab', activeTab);
+    navigate(`${location.pathname}?${params.toString()}`, { replace: true });
+  }, [activeTab, navigate, location.pathname, location.search]);
 
   const handleOptionSelect = (optionId: string) => {
     const currentQuestion = getQuestionById(caseData.currentQuestionId);

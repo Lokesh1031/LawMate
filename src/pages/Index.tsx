@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { 
   Scale,
@@ -15,6 +15,13 @@ import {
 } from "lucide-react";
 
 const Index = () => {
+  const navigate = useNavigate();
+  
+  const handleGetStarted = () => {
+    // Navigate to questionnaire with the assistant tab pre-selected
+    navigate("/questionnaire?tab=assistant");
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header */}
@@ -30,7 +37,11 @@ const Index = () => {
             <Link to="/documents" className="text-white hover:text-lawmate-accent transition">Documents</Link>
             <Link to="/faq" className="text-white hover:text-lawmate-accent transition">FAQ</Link>
           </nav>
-          <Button variant="outline" className="bg-white text-lawmate hover:bg-lawmate-accent hover:text-white">
+          <Button 
+            variant="outline" 
+            className="bg-white text-lawmate hover:bg-lawmate-accent hover:text-white"
+            onClick={handleGetStarted}
+          >
             Get Started
           </Button>
         </div>
@@ -45,12 +56,14 @@ const Index = () => {
             Step-by-step guidance for your legal needs.
           </p>
           <div className="flex flex-col md:flex-row gap-4 justify-center">
-            <Link to="/questionnaire">
-              <Button size="lg" className="bg-white text-lawmate hover:bg-lawmate-accent hover:text-white">
-                Start Legal Questionnaire
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </Link>
+            <Button 
+              size="lg" 
+              className="bg-white text-lawmate hover:bg-lawmate-accent hover:text-white"
+              onClick={handleGetStarted}
+            >
+              Start Legal Questionnaire
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
             <Link to="/categories">
               <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-lawmate">
                 Browse Legal Categories
@@ -152,12 +165,14 @@ const Index = () => {
           <p className="text-xl mb-10 max-w-2xl mx-auto">
             Start your legal self-help journey today with our guided questionnaire.
           </p>
-          <Link to="/questionnaire">
-            <Button size="lg" className="bg-white text-lawmate hover:bg-lawmate-accent hover:text-white">
-              Begin Your Legal Assessment
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-          </Link>
+          <Button 
+            size="lg" 
+            className="bg-white text-lawmate hover:bg-lawmate-accent hover:text-white"
+            onClick={handleGetStarted}
+          >
+            Begin Your Legal Assessment
+            <ArrowRight className="ml-2 h-5 w-5" />
+          </Button>
         </div>
       </section>
 
