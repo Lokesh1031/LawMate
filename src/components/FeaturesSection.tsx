@@ -1,7 +1,9 @@
 
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Scale, FileText, Navigation } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Scale, FileText, Navigation, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const FeaturesSection: React.FC = () => {
   const features = [
@@ -9,19 +11,22 @@ const FeaturesSection: React.FC = () => {
       icon: Scale,
       title: "Personal Legal Assessment",
       description: "Get AI-powered analysis of your legal situation with specific article and section references from our comprehensive legal database.",
-      color: "assessment-theme"
+      color: "assessment-theme",
+      link: "/assessments"
     },
     {
       icon: FileText,
       title: "Document Templates",
       description: "Access professionally crafted legal document templates that are automatically customized based on your specific case requirements.",
-      color: "templates-theme"
+      color: "templates-theme",
+      link: "/templates"
     },
     {
       icon: Navigation,
       title: "Step-by-Step Guidance",
       description: "Follow detailed, sequential instructions that guide you through complex legal processes from start to finish.",
-      color: "guidance-theme"
+      color: "guidance-theme",
+      link: "/guidance"
     }
   ];
 
@@ -51,9 +56,12 @@ const FeaturesSection: React.FC = () => {
                 </CardHeader>
                 <CardContent className="pt-0">
                   <div className="text-center">
-                    <div className="inline-flex items-center px-3 py-1 rounded-full bg-white shadow-sm text-sm font-medium">
-                      Complete Solution
-                    </div>
+                    <Link to={feature.link}>
+                      <Button className="w-full bg-lawmate text-white hover:bg-lawmate-dark">
+                        Explore {feature.title}
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </Button>
+                    </Link>
                   </div>
                 </CardContent>
               </Card>

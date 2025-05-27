@@ -2,7 +2,7 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, X, History } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import UserProfile from "@/components/auth/UserProfile";
 
@@ -22,7 +22,7 @@ const Layout = ({ children }: LayoutProps) => {
         <div className="container flex justify-between items-center">
           <div className="flex items-center gap-3">
             <img 
-              src="/lovable-uploads/f02b5f04-21e3-447d-bf8b-338e04242896.png" 
+              src="/lovable-uploads/04c1c53e-6c2f-4ea7-8e2f-6ad271b96b01.png" 
               alt="LawMate Logo" 
               className="h-10 w-10"
             />
@@ -77,6 +77,12 @@ const Layout = ({ children }: LayoutProps) => {
             <Link to="/categories" className="px-4 py-2 hover:bg-lawmate hover:bg-opacity-50 rounded" onClick={() => setMobileMenuOpen(false)}>Legal Categories</Link>
             <Link to="/documents" className="px-4 py-2 hover:bg-lawmate hover:bg-opacity-50 rounded" onClick={() => setMobileMenuOpen(false)}>Documents</Link>
             <Link to="/faq" className="px-4 py-2 hover:bg-lawmate hover:bg-opacity-50 rounded" onClick={() => setMobileMenuOpen(false)}>FAQ</Link>
+            {user && (
+              <Link to="/history" className="px-4 py-2 hover:bg-lawmate hover:bg-opacity-50 rounded flex items-center" onClick={() => setMobileMenuOpen(false)}>
+                <History className="h-4 w-4 mr-2" />
+                History
+              </Link>
+            )}
             {!loading && !user && (
               <Link to="/auth" className="px-4 py-2 hover:bg-lawmate hover:bg-opacity-50 rounded" onClick={() => setMobileMenuOpen(false)}>
                 Sign In
