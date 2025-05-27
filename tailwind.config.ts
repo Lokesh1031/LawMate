@@ -69,6 +69,21 @@ export default {
 					dark: '#1e3a8a',
 					accent: '#38bdf8',
 					muted: '#94a3b8'
+				},
+				assessment: {
+					bg: 'hsl(var(--assessment-bg))',
+					border: 'hsl(var(--assessment-border))',
+					text: 'hsl(var(--assessment-text))'
+				},
+				templates: {
+					bg: 'hsl(var(--templates-bg))',
+					border: 'hsl(var(--templates-border))',
+					text: 'hsl(var(--templates-text))'
+				},
+				guidance: {
+					bg: 'hsl(var(--guidance-bg))',
+					border: 'hsl(var(--guidance-border))',
+					text: 'hsl(var(--guidance-text))'
 				}
 			},
 			borderRadius: {
@@ -97,6 +112,9 @@ export default {
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out'
+			},
+			fontFamily: {
+				'castellar': ['Castellar', 'serif'],
 			}
 		}
 	},

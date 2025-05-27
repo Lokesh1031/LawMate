@@ -2,7 +2,7 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Scale, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import UserProfile from "@/components/auth/UserProfile";
 
@@ -20,10 +20,14 @@ const Layout = ({ children }: LayoutProps) => {
       {/* Header */}
       <header className="bg-lawmate py-4 px-6 shadow-md">
         <div className="container flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <Scale className="h-8 w-8 text-white" />
+          <div className="flex items-center gap-3">
+            <img 
+              src="/lovable-uploads/f02b5f04-21e3-447d-bf8b-338e04242896.png" 
+              alt="LawMate Logo" 
+              className="h-10 w-10"
+            />
             <Link to="/">
-              <h1 className="text-2xl font-bold text-white">LawMate</h1>
+              <h1 className="text-2xl font-bold text-white" style={{ fontFamily: 'Castellar, serif' }}>LawMate</h1>
             </Link>
           </div>
           
@@ -97,9 +101,13 @@ const Layout = ({ children }: LayoutProps) => {
         <div className="container mx-auto px-6">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
-              <div className="flex items-center gap-2 mb-4">
-                <Scale className="h-6 w-6" />
-                <h3 className="text-xl font-bold">LawMate</h3>
+              <div className="flex items-center gap-3 mb-4">
+                <img 
+                  src="/lovable-uploads/f02b5f04-21e3-447d-bf8b-338e04242896.png" 
+                  alt="LawMate Logo" 
+                  className="h-8 w-8"
+                />
+                <h3 className="text-xl font-bold" style={{ fontFamily: 'Castellar, serif' }}>LawMate</h3>
               </div>
               <p className="text-gray-300">
                 Your trusted companion for self-help legal guidance.

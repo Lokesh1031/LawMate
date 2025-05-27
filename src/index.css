@@ -1,4 +1,5 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Castellar&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -28,6 +29,19 @@
     --lawmate: 214 100% 42%;
     --lawmate-light: 214 100% 50%;
     --lawmate-dark: 214 100% 30%;
+    
+    /* New color schemes for features */
+    --assessment-bg: 220 100% 97%;
+    --assessment-border: 220 100% 85%;
+    --assessment-text: 220 100% 25%;
+    
+    --templates-bg: 130 50% 97%;
+    --templates-border: 130 50% 85%;
+    --templates-text: 130 50% 25%;
+    
+    --guidance-bg: 25 100% 97%;
+    --guidance-border: 25 100% 85%;
+    --guidance-text: 25 100% 25%;
   }
 
   .dark {
@@ -61,6 +75,25 @@
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
+}
+
+/* Feature color classes */
+.assessment-theme {
+  background-color: hsl(var(--assessment-bg));
+  border-color: hsl(var(--assessment-border));
+  color: hsl(var(--assessment-text));
+}
+
+.templates-theme {
+  background-color: hsl(var(--templates-bg));
+  border-color: hsl(var(--templates-border));
+  color: hsl(var(--templates-text));
+}
+
+.guidance-theme {
+  background-color: hsl(var(--guidance-bg));
+  border-color: hsl(var(--guidance-border));
+  color: hsl(var(--guidance-text));
 }
 
 /* Markdown styling */
