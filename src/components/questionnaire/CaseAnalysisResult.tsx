@@ -7,6 +7,28 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 
+interface LegalReference {
+  articles?: Array<{
+    id: string;
+    article_number: string;
+    title: string;
+    description: string;
+    category: string;
+  }>;
+  sections?: Array<{
+    id: string;
+    section_number: string;
+    title: string;
+    content: string;
+    applicable_scenarios: string[];
+    legal_articles: {
+      article_number: string;
+      title: string;
+      category: string;
+    };
+  }>;
+}
+
 interface CaseAnalysisResultProps {
   customQuestion: string;
   analysisResult: string | null;
@@ -14,6 +36,7 @@ interface CaseAnalysisResultProps {
   handleGuideSelect: (guideId: string) => void;
   handleSaveProgress: () => void;
   loading: boolean;
+  legalReferences?: LegalReference;
 }
 
 const CaseAnalysisResult: React.FC<CaseAnalysisResultProps> = ({
@@ -22,7 +45,8 @@ const CaseAnalysisResult: React.FC<CaseAnalysisResultProps> = ({
   relatedGuides,
   handleGuideSelect,
   handleSaveProgress,
-  loading
+  loading,
+  legalReferences
 }) => {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -36,6 +60,7 @@ const CaseAnalysisResult: React.FC<CaseAnalysisResultProps> = ({
         answer={analysisResult}
         relatedGuides={relatedGuides}
         onGuideSelect={handleGuideSelect}
+        legalReferences={legalReferences}
       />
       <div className="flex flex-col sm:flex-row gap-3">
         <Button 

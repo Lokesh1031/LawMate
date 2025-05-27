@@ -23,6 +23,7 @@ interface QuestionnaireTabsProps {
   handleOptionSelect: (optionId: string) => void;
   handleBack: () => void;
   handleResetQuestionnaire: () => void;
+  legalReferences?: any;
 }
 
 const QuestionnaireTabs: React.FC<QuestionnaireTabsProps> = ({
@@ -40,7 +41,8 @@ const QuestionnaireTabs: React.FC<QuestionnaireTabsProps> = ({
   handleSaveProgress,
   handleOptionSelect,
   handleBack,
-  handleResetQuestionnaire
+  handleResetQuestionnaire,
+  legalReferences
 }) => {
   return (
     <Tabs defaultValue="guided" value={activeTab} onValueChange={(value) => setActiveTab(value as "guided" | "custom" | "assistant")}>
@@ -77,6 +79,7 @@ const QuestionnaireTabs: React.FC<QuestionnaireTabsProps> = ({
           handleGuideSelect={handleGuideSelect}
           handleResetQuestionnaire={handleResetQuestionnaire}
           handleSaveProgress={handleSaveProgress}
+          legalReferences={legalReferences}
         />
       </TabsContent>
       

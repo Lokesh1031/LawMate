@@ -27,6 +27,7 @@ const Questionnaire = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisResult, setAnalysisResult] = useState<string | null>(null);
   const [relatedGuides, setRelatedGuides] = useState<Array<{id: string; title: string;}>>([]);
+  const [legalReferences, setLegalReferences] = useState<any>(null);
 
   // Calculate progress values
   const totalQuestions = 6;
@@ -124,6 +125,7 @@ const Questionnaire = () => {
       if (data && data.analysis) {
         setAnalysisResult(data.analysis.summary);
         setRelatedGuides(data.analysis.relatedGuides || []);
+        setLegalReferences(data.analysis.legalReferences || null);
         
         // Store this information
         updateCase({
@@ -165,6 +167,7 @@ const Questionnaire = () => {
       
       setAnalysisResult(resultText);
       setRelatedGuides(matchedGuides);
+      setLegalReferences(null);
       
       // Store this information
       updateCase({
@@ -254,6 +257,7 @@ const Questionnaire = () => {
           handleOptionSelect={handleOptionSelect}
           handleBack={handleBack}
           handleResetQuestionnaire={handleResetQuestionnaire}
+          legalReferences={legalReferences}
         />
         
         <div className="mt-8 text-center text-sm text-gray-500">

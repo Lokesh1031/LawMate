@@ -9,6 +9,122 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      case_legal_references: {
+        Row: {
+          article_id: string | null
+          case_description: string
+          created_at: string
+          id: string
+          relevance_score: number | null
+          section_id: string | null
+          user_id: string
+        }
+        Insert: {
+          article_id?: string | null
+          case_description: string
+          created_at?: string
+          id?: string
+          relevance_score?: number | null
+          section_id?: string | null
+          user_id: string
+        }
+        Update: {
+          article_id?: string | null
+          case_description?: string
+          created_at?: string
+          id?: string
+          relevance_score?: number | null
+          section_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "case_legal_references_article_id_fkey"
+            columns: ["article_id"]
+            isOneToOne: false
+            referencedRelation: "legal_articles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "case_legal_references_section_id_fkey"
+            columns: ["section_id"]
+            isOneToOne: false
+            referencedRelation: "legal_sections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      legal_articles: {
+        Row: {
+          article_number: string
+          category: string
+          created_at: string
+          description: string | null
+          id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          article_number: string
+          category: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          article_number?: string
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      legal_sections: {
+        Row: {
+          applicable_scenarios: string[] | null
+          article_id: string | null
+          content: string
+          created_at: string
+          id: string
+          section_number: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          applicable_scenarios?: string[] | null
+          article_id?: string | null
+          content: string
+          created_at?: string
+          id?: string
+          section_number: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          applicable_scenarios?: string[] | null
+          article_id?: string | null
+          content?: string
+          created_at?: string
+          id?: string
+          section_number?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "legal_sections_article_id_fkey"
+            columns: ["article_id"]
+            isOneToOne: false
+            referencedRelation: "legal_articles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
