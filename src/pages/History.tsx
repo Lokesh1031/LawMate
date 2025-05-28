@@ -14,7 +14,7 @@ interface UserCase {
   id: string;
   case_type: string;
   analysis_result: string;
-  answers: Record<string, string>;
+  answers: any; // Changed from Record<string, string> to any to match Supabase Json type
   created_at: string;
 }
 

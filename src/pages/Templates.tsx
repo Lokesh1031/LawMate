@@ -1,12 +1,16 @@
 
-import React from "react";
+import React, { useState } from "react";
 import Layout from "@/components/Layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { FileText, Download, Eye, Star } from "lucide-react";
+import TemplatePreview from "@/components/TemplatePreview";
 
 const Templates = () => {
+  const [previewTemplate, setPreviewTemplate] = useState<any>(null);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+
   const templateCategories = [
     {
       category: "Family Law",
@@ -111,6 +115,25 @@ const Templates = () => {
     }
   };
 
+  const handlePreview = (template: any) => {
+    setPreviewTemplate(template);
+    setIsPreviewOpen(true);
+  };
+
+  const handleDownload = (template: any) => {
+    // Simulate download functionality
+    const blob = new Blob([`Template: ${template.title}\n\nThis would be the actual template content...`], 
+      { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${template.title.replace(/\s+/g, '_')}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <Layout>
       <div className="container mx-auto px-6 py-16">
@@ -147,11 +170,20 @@ const Templates = () => {
                     </CardHeader>
                     <CardContent>
                       <div className="flex gap-2">
-                        <Button variant="outline" size="sm" className="flex-1">
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="flex-1"
+                          onClick={() => handlePreview(template)}
+                        >
                           <Eye className="h-4 w-4 mr-1" />
                           Preview
                         </Button>
-                        <Button size="sm" className="flex-1 bg-lawmate text-white hover:bg-lawmate-dark">
+                        <Button 
+                          size="sm" 
+                          className="flex-1 bg-lawmate text-white hover:bg-lawmate-dark"
+                          onClick={() => handleDownload(template)}
+                        >
                           <Download className="h-4 w-4 mr-1" />
                           Download
                         </Button>
@@ -164,6 +196,7 @@ const Templates = () => {
           ))}
         </div>
 
+        {/* Template Features Section */}
         <div className="mt-16 bg-gray-50 rounded-lg p-8">
           <div className="text-center mb-8">
             <h2 className="text-2xl font-bold mb-4">Template Features</h2>
@@ -192,6 +225,12 @@ const Templates = () => {
             </div>
           </div>
         </div>
+
+        <TemplatePreview
+          isOpen={isPreviewOpen}
+          onClose={() => setIsPreviewOpen(false)}
+          template={previewTemplate}
+        />
       </div>
     </Layout>
   );

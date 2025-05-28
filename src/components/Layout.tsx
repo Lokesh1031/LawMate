@@ -22,7 +22,7 @@ const Layout = ({ children }: LayoutProps) => {
         <div className="container flex justify-between items-center">
           <div className="flex items-center gap-3">
             <img 
-              src="/lovable-uploads/04c1c53e-6c2f-4ea7-8e2f-6ad271b96b01.png" 
+              src="/lovable-uploads/24eda8a9-1e0e-42a4-85c3-3627127936b1.png" 
               alt="LawMate Logo" 
               className="h-10 w-10"
             />
@@ -40,6 +40,15 @@ const Layout = ({ children }: LayoutProps) => {
           </nav>
           
           <div className="flex items-center gap-4">
+            {user && (
+              <Link to="/history">
+                <Button variant="outline" className="hidden md:inline-flex bg-white text-lawmate hover:bg-lawmate-accent hover:text-white">
+                  <History className="h-4 w-4 mr-2" />
+                  History
+                </Button>
+              </Link>
+            )}
+            
             {!loading && (
               user ? (
                 <UserProfile />
@@ -109,7 +118,7 @@ const Layout = ({ children }: LayoutProps) => {
             <div>
               <div className="flex items-center gap-3 mb-4">
                 <img 
-                  src="/lovable-uploads/f02b5f04-21e3-447d-bf8b-338e04242896.png" 
+                  src="/lovable-uploads/24eda8a9-1e0e-42a4-85c3-3627127936b1.png" 
                   alt="LawMate Logo" 
                   className="h-8 w-8"
                 />
