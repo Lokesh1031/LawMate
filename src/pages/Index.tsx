@@ -15,16 +15,16 @@ const Index = () => {
       <section className="bg-gradient-to-br from-lawmate to-lawmate-dark text-white py-20">
         <div className="container mx-auto px-6 text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-6" style={{ fontFamily: 'Castellar, serif' }}>
-            Complete Legal Solutions
+            Your Personal Legal Guide
           </h1>
           <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
-            Get comprehensive legal guidance with AI-powered analysis, specific article references, 
-            and step-by-step solutions - no attorney required.
+            Navigate legal matters with confidence, without expensive lawyer fees.
+            Step-by-step guidance for your legal needs.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/questionnaire">
               <Button size="lg" className="bg-white text-lawmate hover:bg-gray-100 px-8 py-3 text-lg">
-                Start Legal Assessment
+                Start Legal Questionnaire
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
